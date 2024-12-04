@@ -94,6 +94,7 @@ public class Dota2Chat extends Dota2GCMsgHandler{
             dota2Client.postCallback(
                     new ChatMessageCallback(protobuf.getBody(), channels.get(protobuf.getBody().getChannelId())));
         }
+
     }
 
     public void handleMembersLeftUpdate(IPacketGCMsg msg) {

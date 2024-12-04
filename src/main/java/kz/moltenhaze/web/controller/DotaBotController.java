@@ -43,6 +43,13 @@ public class DotaBotController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/createbot")
+    public ResponseEntity<Void> createBot() {
+        dotaBotService.createBot();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }

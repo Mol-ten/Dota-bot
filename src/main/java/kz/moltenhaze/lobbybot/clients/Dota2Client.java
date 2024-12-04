@@ -12,8 +12,6 @@ import in.dragonbra.javasteam.steam.steamclient.callbacks.DisconnectedCallback;
 import in.dragonbra.javasteam.steam.steamclient.configuration.SteamConfiguration;
 import in.dragonbra.javasteam.util.MsgUtil;
 import in.dragonbra.javasteam.util.event.ScheduledFunction;
-import in.dragonbra.javasteam.util.log.LogManager;
-import in.dragonbra.javasteam.util.log.Logger;
 import kz.moltenhaze.lobbybot.callbacks.common.ConnectionStatusCallback;
 import kz.moltenhaze.lobbybot.callbacks.common.NotReadyCallback;
 import kz.moltenhaze.lobbybot.callbacks.common.ReadyCallback;
@@ -39,7 +37,6 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class Dota2Client extends CommonSteamClient implements IGCMsgHandler {
-    private static final Logger logger = LogManager.getLogger(Dota2Client.class);
     public static final int APP_ID = 570;
 
     @Getter
@@ -67,8 +64,8 @@ public class Dota2Client extends CommonSteamClient implements IGCMsgHandler {
     private final Map<Integer, Consumer<IPacketGCMsg>> dispatchMap;
     private final ScheduledFunction welcomeFunc;
 
-    public Dota2Client(String username, String password) {
-        super(username, password);
+    public Dota2Client() {
+        super("moneymason", "shelby31gt500");
 
         dispatchMap = new HashMap<>();
         dispatchMap.put(EGCBaseClientMsg.k_EMsgGCClientWelcome_VALUE, this::handleWelcome);
@@ -191,6 +188,8 @@ public class Dota2Client extends CommonSteamClient implements IGCMsgHandler {
 
         if (gcConnectionStatus.equals(GCConnectionStatus.GCConnectionStatus_HAVE_SESSION) && !ready) {
             ready = true;
+            log.debug("Posting ReadyCallback");
+            log.info("DOTA2CLIENT: {}", this);
             postCallback(new ReadyCallback());
         } else if (!gcConnectionStatus.equals(GCConnectionStatus.GCConnectionStatus_HAVE_SESSION) && ready) {
             ready = false;

@@ -2,6 +2,7 @@ package kz.moltenhaze.web.service;
 
 import kz.moltenhaze.lobbybot.DTO.TeamSlotDTO;
 import kz.moltenhaze.lobbybot.DotaBot;
+import kz.moltenhaze.lobbybot.managers.DotaBotManager;
 import kz.moltenhaze.proto.dota.DotaGcmessagesClientMatchManagement.CMsgPracticeLobbySetDetails;
 import kz.moltenhaze.proto.dota.DotaSharedEnums.DOTASelectionPriorityRules;
 import kz.moltenhaze.proto.dota.DotaSharedEnums.DOTALobbyVisibility;
@@ -14,25 +15,30 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class DotaBotService {
-    private DotaBot dotaBot;
+    private DotaBotManager botManager;
 
     public void start() {
-        dotaBot.start();
+        botManager.getCurrentBot().start();
     }
 
     public void destroy() {
-        dotaBot.destroyLobby();
+        botManager.getCurrentBot().getLobbyManager().destroyLobby();
     }
 
     public void launchLobby() {
-        dotaBot.launchLobby();
+        botManager.getCurrentBot().getLobbyManager().launchLobby();
     }
+
+    public void createBot() {
+        botManager.createNewBot();
+    }
+
 
 
     public void createLobby(Long messageId, LobbyOptionsDTO lobbyOptionsDTO) {
         LobbyOptionsMapper mapper = new LobbyOptionsMapper();
 
-        dotaBot.createLobby(mapper.toBuilder(lobbyOptionsDTO));
+        botManager.getCurrentBot().getLobbyManager().createLobby(mapper.toBuilder(lobbyOptionsDTO));
     }
 
     public void configureLobby(Long messageId, LobbyOptionsDTO lobbyOptionsDTO) {
